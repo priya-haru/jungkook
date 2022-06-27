@@ -1,0 +1,38 @@
+---
+- name: playbook to copy war
+  hosts: my-server
+  tasks:
+
+    - name: copy a war file
+      copy:
+        src: /etc/ansible/sparkjava-war-example/target/sparkjava-hello-world-1.0.war
+        dest: /home/ec2-user/apache-tomcat-9.0.63/webapps
+        backup: yes
+
+    - name: backup bin files
+      copy:
+        src: /etc/ansible
+        dest: /home/ec2-user/apache-tomcat-9.0.63/bin
+        backup: yes
+
+    - name: backup config files
+      copy:
+        src: /etc/ansible
+        dest: /home/ec2-user/apache-tomcat-9.0.63/conf
+        backup: yes
+ 
+     - name: starting tomcat
+      shell: nohup /home/ec2-user/apache-tomcat-9.0.63/bin/shutdown.sh
+
+     - name: remove file
+      file:
+         path: /home/ec2-user/apache-tomcat-9.0.63/webapps
+         state: absent
+
+     - name: copy a war file
+      copy:
+        src: /etc/ansible/sparkjava-war-example/target/sparkjava-hello-world-1.0.war
+        dest: /home/ec2-user/apache-tomcat-9.0.63/webapps
+
+     - name: starting tomcat
+      shell: nohup /home/ec2-user/apache-tomcat-9.0.63/bin/startup.sh
